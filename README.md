@@ -1,4 +1,4 @@
-dart_validator
+dart_validation
 ==============
 
 A validation library in Dart
