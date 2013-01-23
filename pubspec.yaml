@@ -1,0 +1,11 @@
+name:  dart_validation
+description:  A sample application
+
+version: 0.0.1
+
+author: Tomochika Hara <tomochikahara@gmail.com>
+
+dependencies:
+  meta: any
+  intl: any
+  unittest: any
