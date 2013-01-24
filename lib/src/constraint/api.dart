@@ -18,15 +18,24 @@ abstract class Constraint<T> {
  */
 class Commitment<T> {
   
-  T value;
-  
-  OnViolation<T> onViolation = (ConstraintViolation<T> violation) {
-    throw new ConstraintViolationException<T>(violation);
+  static final OnViolation defaultOnViolation = (violation) {
+    throw new ConstraintViolationException(violation);
   };
   
-  //TODO which is better?  
-  Commitment([this.value, this.onViolation]);
-//  Commitment({this.value, this.onViolation});
+  final T value;
+  
+  OnViolation<T> _onViolation;
+  
+  Commitment(this.value, [OnViolation<T> onViolation]) {
+    if (?onViolation) {
+      _onViolation = defaultOnViolation;
+    } else {
+      Expect.isNotNull(onViolation, "handler on violation must not be null.");
+      this._onViolation = onViolation;
+    }
+  }
+  
+  OnViolation<T> get onViolation => _onViolation;
 }
 
 /**

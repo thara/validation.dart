@@ -4,6 +4,7 @@
 library spec;
 
 import 'package:meta/meta.dart';
+import 'package:args/args.dart';
 
 part 'src/spec/api.dart';
 part 'src/spec/operators.dart';

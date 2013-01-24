@@ -9,3 +9,4 @@ dependencies:
   meta: any
   intl: any
   unittest: any
+  args: 0.3.1+1
