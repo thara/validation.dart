@@ -1,32 +1,19 @@
 part of validator;
 
 /**
- * A [Validator] for any [Constraiont].
+ * A [Validator].
  */
 abstract class Validator<T> {
   
   factory Validator(Constraint<T> constraint) => 
     new ConstraintValidator<T>(constraint);
   
-  void validate(T target, [OnViolation<T> onViolation]);
+  ValidationResult validate(T target);
 }
 
-//abstract class SkeletonValidator<T> implements Validator<T> {
-//  
-//  void validate(T target, [OnViolation<T> onViolation]) {
-//    Validatable<T> validatable = new Validatable();
-//    validatable.value = target;
-//    
-//    if (?onViolation) {
-//      validatable.onViolation = onViolation;
-//    }
-//    
-//    doValidate(validatable);
-//  }
-//  
-//  void doValidate(Validatable<T> validatable);
-//}
-
+/**
+ * A simple [Validator]'s implemetation for one [Constraiont].
+ */
 class ConstraintValidator<T> implements Validator<T> {
   
   final Constraint<T> _constraint;
@@ -35,38 +22,43 @@ class ConstraintValidator<T> implements Validator<T> {
     Expect.isNotNull(_constraint, "constraint must not be nul.");
   }
   
-  void validate(T target, [OnViolation<T> onViolation]) {
-    Validatable<T> validatable = new Validatable();
-    validatable.value = target;
-    
-    if (?onViolation) {
-      validatable.onViolation = onViolation;
-    }
-    
-    _constraint.isFulfilledBy(validatable);
+  ValidationResult validate(T target) {
+    var result = buildNewResult();
+    _constraint.isFulfilledBy(target, result.error);
+    return result;
   }
-}
 
-class CombinedConstraintsValidator<T> extends ConstraintValidator<T> {
-  
-  static Constraint combineConstraints(List<Constraint> constraints) {
-    return toConstraint((_) {
-      return constraints.every((constraint) => constraint.isFulfilledBy(_));
-    });
-  }
-  
-  CombinedConstraintsValidator(List<Constraint> constraints) 
-    : super(combineConstraints(constraints));
+  ValidationResult buildNewResult() => new ValidationResult();
 }
 
 /**
- * A [Validatable] something.
+ * A [ValitionResult] has result of validation.
  */
-class Validatable<T> implements Commitment<T> {
+class ValidationResult<T> {
   
-  T value;
+  final List<ConstraintViolation> _violations = [];
   
-  OnViolation<T> onViolation = Commitment.defaultOnViolation;
+  void thenError(Constraint constrant, OnViolation hander) {
+    _violations.where((e) => identical(e.constraint, constrant)).forEach(hander);
+  }
   
-  Validatable([this.value, this.onViolation]);
+  List<ConstraintViolation> get violations => new List.from(_violations);
+  
+  void error(ConstraintViolation violation) {
+    _violations.add(violation);
+  }
+  
+  bool get isValid => _violations.isEmpty;
+  
+  void thenInvalid(void handler(List<ConstraintViolation> violations)) {
+    if (!isValid) {
+      handler(violations);
+    }
+  }
+  
+  void rejectError() {
+    thenInvalid((violations) {
+      throw new ConstraintViolationException(violations);
+    });
+  }
 }

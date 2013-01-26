@@ -42,7 +42,7 @@ class _ConditionalSpecification<T> extends Specification<T> {
   final IsSatisfiedBy<T> _expression;
   
   _ConditionalSpecification(this._expression) {
-    Expect.isNotNull(_expression, "");
+    Expect.isNotNull(_expression, "hoge");
   }
   
   @override

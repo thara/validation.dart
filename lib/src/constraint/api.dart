@@ -10,32 +10,13 @@ typedef OnViolation<T>(ConstraintViolation<T> violation);
  */
 abstract class Constraint<T> {
   
-  void isFulfilledBy(Commitment<T> commitment);
-}
-
-/**
- * A [Commitment] of [T] might fulfill to any [Constraint]s.
- */
-class Commitment<T> {
+  factory Constraint(Specification<T> spec) =>
+    new SpecificationConstraint(spec);
   
-  static final OnViolation defaultOnViolation = (violation) {
-    throw new ConstraintViolationException(violation);
-  };
+  factory Constraint.expressin(IsSatisfiedBy expression) =>
+    new ConditionalConstraint(expression);
   
-  final T value;
-  
-  OnViolation<T> _onViolation;
-  
-  Commitment(this.value, [OnViolation<T> onViolation]) {
-    if (?onViolation) {
-      _onViolation = defaultOnViolation;
-    } else {
-      Expect.isNotNull(onViolation, "handler on violation must not be null.");
-      this._onViolation = onViolation;
-    }
-  }
-  
-  OnViolation<T> get onViolation => _onViolation;
+  void isFulfilledBy(T commitment, OnViolation onViolation);
 }
 
 /**
@@ -44,9 +25,9 @@ class Commitment<T> {
 class ConstraintViolation<T> {
   
   final Constraint<T> constraint;
-  final T cause;
+  final T invalidValue;
   
-  ConstraintViolation(this.constraint, this.cause) {
+  ConstraintViolation(this.constraint, this.invalidValue) {
     Expect.isNotNull(constraint, "constraint must not be null.");
     // cause might be null if a specification of constraint is whatever null or not.
   }
@@ -56,9 +37,9 @@ class ConstraintViolation<T> {
  * A [Exception] wrapped [ConstraintViolation]
  */
 class ConstraintViolationException<T> implements Exception {
-  final ConstraintViolation<T> violation;
+  final List<ConstraintViolation<T>> violations;
   
-  ConstraintViolationException(this.violation);
+  ConstraintViolationException(this.violations);
   
   toString() {
     //TODO toString must be implemented.

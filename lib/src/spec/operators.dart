@@ -46,4 +46,3 @@ class _NotSpecification<T> extends Specification<T> {
     return !_spec1.isSatisfiedBy(target);
   }
 }
-

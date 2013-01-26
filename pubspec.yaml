@@ -1,12 +1,12 @@
 name:  dart_validation
-description:  A sample application
-
 version: 0.0.1
+description: >
+  A lightweight validation library in Dart.
+  This package address Domain-Driven-Design,
+  and validation constraints is able to place anywhere.
 
 author: Tomochika Hara <tomochikahara@gmail.com>
 
 dependencies:
-  meta: any
-  intl: any
-  unittest: any
-  args: 0.3.1+1
+  unittest: 0.3.1+1
+  meta: 0.3.1+1

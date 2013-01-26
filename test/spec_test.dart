@@ -1,7 +1,6 @@
 library spec_test;
 
 import 'package:unittest/unittest.dart';
-
 import 'package:dart_validation/spec.dart';
 
 main () => run();
