@@ -1,6 +1,8 @@
-import 'spec_test.dart' as spec_test;
+import 'spec_test.dart' as spec;
+import 'spec_util_test.dart' as spec_util;
 
 main () {
-  spec_test.run();
+  spec.run();
+  spec_util.run();
 }
 
