@@ -8,15 +8,17 @@ main () {
   var validator = new Validator<Person>(Person.constraint);
   var person = new PersonEntry(name:"", age:10);
   
+  // do validation. you can catch each constraint violations or all.
   validator.validate(person)
     ..thenError(Person.constraint.name, (v) => print("name is invalid"))
     ..violations.forEach(print);
   
-  validator = new Validator<int>(Person.constraint.age);
+  // and, you can validate one of field constraints by PersonConstraint.
+  var ageValidator = new Validator<int>(Person.constraint.age);
   var personAge = -20;
   
   try {
-    validator.validate(personAge).rejectError();  
+    ageValidator.validate(personAge).rejectError();  
   } catch (e, s) {
     print(s);
   }
