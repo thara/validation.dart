@@ -8,5 +8,5 @@ description: >
 author: Tomochika Hara <tomochikahara@gmail.com>
 
 dependencies:
-  unittest: 0.3.1+1
-  meta: 0.3.1+1
+  unittest: ">=0.3.2"
+  meta: ">=0.3.2"
