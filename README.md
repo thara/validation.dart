@@ -1,7 +1,9 @@
-dart_validation
+validation.dart
 ==============
 
-A lightweight validation library in Dart.
+*A lightweight validation library in Dart.*
+-------------------------
+
 This package address Domain-Driven-Design,
 and validation constraints is able to place anywhere.
 
